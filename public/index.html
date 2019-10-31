@@ -25,7 +25,10 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <![endif]-->
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="971765730332-g9e3hn4nqkeg9dgjsiu7c3e7c46lvp4q.apps.googleusercontent.com">
 </head>
 
 <body class="card-no-border">
@@ -38,6 +41,7 @@
             <p class="loader__label">Cargando Chat...</p>
         </div>
     </div>
+
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
@@ -46,9 +50,12 @@
             <div class="login-box card">
                 <div class="card-body">
                     <form class="form-horizontal form-material" id="loginform" action="chat.html">
+                    <!-- <form class="form-horizontal form-material" id="loginform" action="chat.html"> -->
                         <h3 class="box-title m-b-20">Ingresar al Chat</h3>
                         <div class="form-group ">
                             <div class="col-xs-12">
+                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                <a href="#" onclick="signOut();">Sign out</a>
                                 <input class="form-control" type="text" required="" placeholder="Nombre de usuario" name="nombre"> </div>
                         </div>
                         <div class="form-group">
@@ -75,6 +82,7 @@
     <!-- All Jquery -->
     <!-- ============================================================== -->
     <script src="../assets/plugins/jquery/jquery.min.js"></script>
+    <!-- <script src="js/socket-index.js"></script> -->
     <!-- Bootstrap tether Core JavaScript -->
     <script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
     <script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -86,6 +94,42 @@
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
         });
+    </script>
+
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                console.log('User signed out.');
+                document.getElementById("loginform").reset(); 
+            });
+        }
+    </script>
+
+
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            $('input[name="nombre"]').val(profile.getName());
+
+            var id_token = googleUser.getAuthResponse().id_token;
+            // console.log('token: ' + id_token);
+
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', '/google');
+            // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            // xhr.onload = function() {
+            //     console.log(xhr);
+            //     // console.log('Signed in as: ' + xhr.responseText);
+            // };
+            // xhr.send('idtoken=' + id_token);
+
+        }
     </script>
 
 </body>
