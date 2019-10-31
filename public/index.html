@@ -52,6 +52,9 @@
                     <form class="form-horizontal form-material" id="loginform" action="chat.html">
                     <!-- <form class="form-horizontal form-material" id="loginform" action="chat.html"> -->
                         <h3 class="box-title m-b-20">Ingresar al Chat</h3>
+                        <div class="imagen" hidden>
+                            <img src="" alt="user-img" class="foto mx-auto d-block img-circle img-thumbnail img-80x80">
+                        </div>
                         <div class="form-group ">
                             <div class="col-xs-12">
                                 <div class="g-signin2" data-onsuccess="onSignIn"></div>
@@ -102,6 +105,8 @@
             auth2.signOut().then(function() {
                 console.log('User signed out.');
                 document.getElementById("loginform").reset(); 
+                // $(".imagen").Attr("hidden");
+                $(".imagen").attr("hidden",true);
             });
         }
     </script>
@@ -116,6 +121,8 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             $('input[name="nombre"]').val(profile.getName());
+            $(".foto").attr("src", profile.getImageUrl());
+            $(".imagen").removeAttr("hidden");
 
             var id_token = googleUser.getAuthResponse().id_token;
             // console.log('token: ' + id_token);

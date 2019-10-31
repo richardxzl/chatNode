@@ -5883,3 +5883,8 @@ File: scss
     text-align: center;
     margin-top: 10px;
     overflow: hidden; } }
+
+.img-80x80 {
+  height: 80px;
+  width: 80px;
+}
