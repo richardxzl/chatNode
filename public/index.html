@@ -49,17 +49,18 @@
         <div class="login-register" style="background-image:url(../assets/images/background/login-register.jpg);">
             <div class="login-box card">
                 <div class="card-body">
-                    <form class="form-horizontal form-material" id="loginform" action="chat.html">
+                    <form class="form-horizontal form-material" id="loginform" action="/google">
                     <!-- <form class="form-horizontal form-material" id="loginform" action="chat.html"> -->
-                        <h3 class="box-title m-b-20">Ingresar al Chat</h3>
+                        <h3 class="box-title m-b-20 d-flex justify-content-center">Ingresar al Chat</h3>
                         <div class="imagen" hidden>
                             <img src="" alt="user-img" class="foto mx-auto d-block img-circle img-thumbnail img-80x80">
                         </div>
                         <div class="form-group ">
                             <div class="col-xs-12">
-                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                                <a href="#" onclick="signOut();">Sign out</a>
-                                <input class="form-control" type="text" required="" placeholder="Nombre de usuario" name="nombre"> </div>
+                                <div class="g-signin2 d-flex justify-content-center" data-onsuccess="onSignIn"></div>
+                                <a href="#" class="logout d-none justify-content-center" onclick="signOut();">Sign out</a>
+                                <input class="form-control" type="text" required="true" placeholder="Nombre de usuario" name="nombre" onkeydown="event.preventDefault()"> 
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-12">
@@ -105,8 +106,9 @@
             auth2.signOut().then(function() {
                 console.log('User signed out.');
                 document.getElementById("loginform").reset(); 
-                // $(".imagen").Attr("hidden");
                 $(".imagen").attr("hidden",true);
+                $(".logout").hide().toggleClass('d-flex');
+                $(".g-signin2").addClass("d-flex").removeClass("d-none");
             });
         }
     </script>
@@ -123,18 +125,27 @@
             $('input[name="nombre"]').val(profile.getName());
             $(".foto").attr("src", profile.getImageUrl());
             $(".imagen").removeAttr("hidden");
+            $(".g-signin2").removeClass("d-flex").addClass("d-none");
+            $(".logout").addClass("d-flex").removeClass("d-none");
+            
 
             var id_token = googleUser.getAuthResponse().id_token;
             // console.log('token: ' + id_token);
 
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', '/google');
-            // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            // xhr.onload = function() {
-            //     console.log(xhr);
-            //     // console.log('Signed in as: ' + xhr.responseText);
-            // };
-            // xhr.send('idtoken=' + id_token);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/google');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                var data=xhr.responseText;
+                // var jsonResponse = JSON.parse(data);
+                // if(jsonResponse['usuario'] && jsonResponse['usuario'].google === true){
+
+                // // console.log(jsonResponse['usuario']);
+                // }
+                console.log(data);
+                // console.log('Signed in as: ' + xhr.responseText);
+            };
+            xhr.send('idtoken=' + id_token);
 
         }
     </script>
